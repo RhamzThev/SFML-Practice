@@ -8,7 +8,7 @@ int main() {
     
 	//This makes a window
 	RenderWindow window(VideoMode(500, 500), "Test Window", Style::Resize | Style::Close);
-	RectangleShape rectangle(Vector2f(50.0f, 50.0f));
+
 
 	//This makes a while loop to keep open.
 	while (window.isOpen()) 
@@ -37,7 +37,17 @@ int main() {
 				}
 			}
 
-			window.draw(rectangle);
+			
+			
+			if (e.type == e.Closed) 
+			{
+				window.close();
+			}
+
+			if (e.type == e.Resized) 
+			{
+
+			}
 		}
 	}
 
