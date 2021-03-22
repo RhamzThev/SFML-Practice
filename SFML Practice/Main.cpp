@@ -8,7 +8,8 @@ int main() {
     
 	//This makes a window
 	RenderWindow window(VideoMode(500, 500), "Test Window", Style::Resize | Style::Close);
-
+	CircleShape rectangle(10.0f);
+	rectangle.setFillColor(Color::Red);
 
 	//This makes a while loop to keep open.
 	while (window.isOpen()) 
@@ -36,19 +37,33 @@ int main() {
 					printf("%c", e.text.unicode);
 				}
 			}
-
-			//Testing this interface again.
-			
-			if (e.type == e.Closed) 
-			{
-				window.close();
-			}
-
-			if (e.type == e.Resized) 
-			{
-
-			}
 		}
+
+		if (Keyboard::isKeyPressed(Keyboard::Key::W))
+		{
+			rectangle.move(0.0f, -0.1f);
+		}
+		else if (Keyboard::isKeyPressed(Keyboard::Key::A))
+		{
+			rectangle.move(-0.1f, 0.0f);
+		}
+		else if (Keyboard::isKeyPressed(Keyboard::Key::S))
+		{
+			rectangle.move(0.0f, 0.1f);
+		}
+		else if (Keyboard::isKeyPressed(Keyboard::Key::D))
+		{
+			rectangle.move(0.1f, 0.0f);
+		}
+		else if (Mouse::isButtonPressed(Mouse::Left))
+		{
+			Vector2i mouse = Mouse::getPosition(window);
+			rectangle.setPosition((float)(mouse.x), (float)(mouse.y));
+		}
+
+		window.clear();
+		window.draw(rectangle);
+		window.display();
 	}
 
 	return 0;
