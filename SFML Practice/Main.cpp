@@ -8,8 +8,13 @@ int main() {
     
 	//This makes a window
 	RenderWindow window(VideoMode(500, 500), "Test Window", Style::Resize | Style::Close);
+
 	CircleShape rectangle(10.0f);
-	rectangle.setFillColor(Color::Red);
+	//rectangle.setFillColor(Color::Red);
+
+	Texture texture;
+	texture.loadFromFile("C:/Users/coolr/Visual Studio Code/gamedev/SFML Practice/SFML Practice/Textures/micro_logo.png");
+	rectangle.setTexture(&texture);
 
 	//This makes a while loop to keep open.
 	while (window.isOpen()) 
@@ -39,23 +44,27 @@ int main() {
 			}
 		}
 
-		if (Keyboard::isKeyPressed(Keyboard::Key::W))
+		if (Keyboard::isKeyPressed(Keyboard::Key::W) || Keyboard::isKeyPressed(Keyboard::Key::Up))
 		{
 			rectangle.move(0.0f, -0.1f);
 		}
-		else if (Keyboard::isKeyPressed(Keyboard::Key::A))
+		
+		if (Keyboard::isKeyPressed(Keyboard::Key::A) || Keyboard::isKeyPressed(Keyboard::Key::Left))
 		{
 			rectangle.move(-0.1f, 0.0f);
 		}
-		else if (Keyboard::isKeyPressed(Keyboard::Key::S))
+		
+		if (Keyboard::isKeyPressed(Keyboard::Key::S) || Keyboard::isKeyPressed(Keyboard::Key::Down))
 		{
 			rectangle.move(0.0f, 0.1f);
 		}
-		else if (Keyboard::isKeyPressed(Keyboard::Key::D))
+		
+		if (Keyboard::isKeyPressed(Keyboard::Key::D) || Keyboard::isKeyPressed(Keyboard::Key::Right))
 		{
 			rectangle.move(0.1f, 0.0f);
 		}
-		else if (Mouse::isButtonPressed(Mouse::Left))
+		
+		if (Mouse::isButtonPressed(Mouse::Left))
 		{
 			Vector2i mouse = Mouse::getPosition(window);
 			rectangle.setPosition((float)(mouse.x), (float)(mouse.y));
