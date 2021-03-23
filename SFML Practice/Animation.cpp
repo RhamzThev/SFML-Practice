@@ -1,54 +1,41 @@
+#include <SFML/Graphics.hpp>
+#include <iostream>
 #include "Animation.h"
 
-Animation::Animation(Texture* texture, Vector2u imageCount, float switchTime)
-{
-	this->imageCount = imageCount;
-	this->switchTime = switchTime;
-	totalTime = 0.0f;
-	currentImage.x = 0;
+using namespace sf;
+using namespace std;
 
-	uvRect.width = texture->getSize().x / float(imageCount.x);
-	uvRect.height = texture->getSize().y / float(imageCount.y);
+Animation::Animation(Texture texture, int maxRow, int maxCol)
+{
+	this->texture = texture;
+	this->maxRow = maxRow;
+	this->maxCol = maxCol;
+
+	Vector2u size = this->texture.getSize();
+	
+	width = size.x;
+	height = size.y;
+
 }
 
-void Animation::update(int row, float deltaTime)
+Sprite Animation::animate(float time, Clock clock) 
 {
-	currentImage.y = row;
-	totalTime += deltaTime;
-
-	if (totalTime >= switchTime)
-	{
-		totalTime -= switchTime;
-		currentImage.x++;
-
-		if (currentImage.x >= imageCount.x) 
-		{
-			currentImage.x = 0;
+	IntRect rectSourceSprite(0, 0, width / maxCol, height / maxRow);
+	Sprite sprite(texture, rectSourceSprite);
+	if (clock.getElapsedTime().asSeconds() > time) {
+		if (rectSourceSprite.left >= width - (width / maxCol)) {
+			rectSourceSprite.left = 0;
+		}
+		else {
+			rectSourceSprite.left += (width / maxCol);
 		}
 
+		sprite.setTextureRect(rectSourceSprite);
+		time = clock.restart().asSeconds();
 	}
 
-	uvRect.left = currentImage.x * uvRect.width;
-	uvRect.top = currentImage.y * uvRect.height;
+	return sprite;
 }
 
-void Animation::update(int row, int col, float deltaTime)
-{
-	currentImage.y = row;
-	totalTime += deltaTime;
 
-	if (totalTime >= switchTime)
-	{
-		totalTime -= switchTime;
-		currentImage.x++;
 
-		if (currentImage.x >= col)
-		{
-			currentImage.x = 0;
-		}
-
-	}
-
-	uvRect.left = currentImage.x * uvRect.width;
-	uvRect.top = currentImage.y * uvRect.height;
-}
