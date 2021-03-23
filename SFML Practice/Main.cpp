@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "Animation.h"
 
 using namespace sf;
 using namespace std;
@@ -7,28 +8,31 @@ using namespace std;
 int main() {
     
 	//This makes a window
-	int size = 500;
+	int size = 1000;
 	RenderWindow window(VideoMode(size, size), "Test Window", Style::Resize | Style::Close);
 
-	float rectangleSize = 500.0f;
-	RectangleShape rectangle(Vector2f(rectangleSize, rectangleSize));
-	float center = ((float)size / 2.0f) - (rectangleSize / 2.0f);
-	rectangle.setPosition(center, center);
+	float rectangleX = 700.0f;
+	float rectangleY = 700.0f;
+	RectangleShape rectangle(Vector2f(rectangleX, rectangleY));
+	float centerX = ((float)size / 2.0f) - (rectangleX / 2.0f);
+	float centerY = ((float)size / 2.0f) - (rectangleX / 2.0f);
+	rectangle.setPosition(centerX, centerY);
 	//rectangle.setFillColor(Color::Red);
 
 	Texture texture;
 	texture.loadFromFile("C:/Users/coolr/Visual Studio Code/gamedev/SFML Practice/SFML Practice/Textures/checkers.png");
 	rectangle.setTexture(&texture);
 
-	Vector2u textureSize = texture.getSize();
-	textureSize.x /= 5;
-	textureSize.y /= 5;
 
-	rectangle.setTextureRect(IntRect(textureSize.x * 2, textureSize.y * 4, textureSize.x, textureSize.y));
+	Animation animation(&texture, Vector2u(9, 3), 0.3f);
+
+	float deltaTime = 0.0f;
+	Clock clock;
 
 	//This makes a while loop to keep open.
 	while (window.isOpen()) 
 	{
+		deltaTime = clock.restart().asSeconds();
 		Event e;
 
 		while (window.pollEvent(e)) 
@@ -79,6 +83,9 @@ int main() {
 			Vector2i mouse = Mouse::getPosition(window);
 			rectangle.setPosition((float)(mouse.x), (float)(mouse.y));
 		}*/
+
+		animation.update(2, 4, deltaTime);
+		rectangle.setTextureRect(animation.uvRect);
 
 		window.clear();
 		window.draw(rectangle);
